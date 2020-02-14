@@ -1,4 +1,3 @@
-var getal;
 
 function leesGetal() {
 
@@ -13,7 +12,7 @@ function berekenTafels() {
     var uitkomst=[]; 
     for (var table=1; table<=20; table++)
     {
-        uitkomst.push(table*getal1);
+        uitkomst.push(table*getal);
     
     }   return uitkomst;
 }
@@ -22,13 +21,13 @@ function toonTafels(getal,uitkomst) {
     var display="";
     for (var table=1; table<=20; table++)
         {
-        display += table + "*" + getal1 + "=" + uitkomst.shift()+"<br />";
+        display += table + "*" + getal + "=" + uitkomst.shift()+"<br />";
         }
     document.getElementById("resultaat").innerHTML = display;
 }
 
-var getal1 = leesGetal();
-document.getElementById("waarde").innerHTML = "<h1> Tafels van " + getal1 + "</h1>";
-var getalTafels = berekenTafels(getal1);
-toonTafels(getal1, getalTafels);
+var getal = leesGetal();
+document.getElementById("waarde").innerHTML = "<h1> Tafels van " + getal + "</h1>";
+var getalTafels = berekenTafels(getal);
+toonTafels(getal, getalTafels);
 
