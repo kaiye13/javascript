@@ -1,0 +1,34 @@
+var getal;
+
+function leesGetal() {
+
+    do {
+        getal = +prompt("geef een getal in tussen 1 en 20:"); //een integer van maken 
+    } while (isNaN(getal) || getal == "" || getal == null || getal < 1 || getal > 20);
+    document.getElementById("waarde").innerHTML = "<h1> De tafels van" + getal + "</h1>";
+    return getal;
+}
+
+function berekenTafels() {
+    var uitkomst=[]; 
+    for (var table=1; table<=20; table++)
+    {
+        uitkomst.push(table*getal1);
+    
+    }   return uitkomst;
+}
+
+function toonTafels(getal,uitkomst) {
+    var display="";
+    for (var table=1; table<=20; table++)
+        {
+        display += table + "*" + getal1 + "=" + uitkomst.shift()+"<br />";
+        }
+    document.getElementById("resultaat").innerHTML = display;
+}
+
+var getal1 = leesGetal();
+document.getElementById("waarde").innerHTML = "<h1> Tafels van " + getal1 + "</h1>";
+var getalTafels = berekenTafels(getal1);
+toonTafels(getal1, getalTafels);
+
