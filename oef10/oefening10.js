@@ -9,9 +9,6 @@ function leesGetal() {
     return getal;
 }
 
-
-
-
 function toonTafels(getal) {
     var total = "";
     for (var table = 1; table <= 20; table++) {
