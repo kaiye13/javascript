@@ -16,6 +16,5 @@ function toonTafels(getal) {
     }
     return document.getElementById("resultaat").innerHTML = total;
 }
-
 leesGetal();
 toonTafels(getal);
