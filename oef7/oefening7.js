@@ -5,7 +5,7 @@ if(isNaN(getal1) || isNaN(getal2) || getal1 =="" || getal2=="" ||getal1==null |g
     totaal = "je hebt geen twee getallen ingegeven";
 }else
 {
-    getal1= +getal1;
+    getal1= +getal1; //omzetten naar een getal door er ene + voor te zetten
     getal2 = +getal2;
     if(getal1 > getal2){
         var totaal = "<p>het eerste getal (" + getal1 +") is groter het tweede getal (" + getal2 + ")</p>"   ;
