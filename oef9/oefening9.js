@@ -1,6 +1,6 @@
 
 do {
-    var getal = prompt("geef een getal in tussen 1 en 20:");
+    var getal = +prompt("geef een getal in tussen 1 en 20:"); //een integer van maken 
 } while (isNaN(getal) || getal =="" || getal==null || getal<1 || getal>20);
 
 document.getElementById("waarde").innerHTML = "<h1> De tafels van" + getal + "</h1>";
