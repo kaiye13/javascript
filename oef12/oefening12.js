@@ -45,7 +45,7 @@ function toonSom2 (uitkomst)
 
 var getal = leesGetal();
 document.getElementById("waarde").innerHTML = "<h1> Tafels van " + getal + "</h1>";
-var getalTafels = berekenTafels(getal);
+var getalTafels = berekenTafels();
 console.log(getalTafels);
 toonTafels(getal, getalTafels);
 console.log(getalTafels);
