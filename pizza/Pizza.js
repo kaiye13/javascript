@@ -68,8 +68,9 @@ function toonWinkelmandje(){
 		var aantalText = document.createTextNode(winkelmandje[pizza].aantal); 
 		var naamText = document.createTextNode(pizza); 
 		var prijsText = document.createTextNode(winkelmandje[pizza].subtotaal); 
-		naamKolom.appendChild(naamText);
-		subtotaalKolom.appendChild(prijsText);
+		aantalKolom.appendChild(aantalText); //!! 
+		naamKolom.appendChild(naamText);	//!!
+		subtotaalKolom.appendChild(prijsText); //!!
 
 		rij.appendChild(aantalKolom);
 		rij.appendChild(naamKolom);
