@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <meta name="description" content="Pizza tester">
+
+    <title>My Pizza</title>
+
+    <!-- Bootstrap core CSS -->
+    <link href="css/bootstrap.min.css" rel="stylesheet">
+
+  </head>
+
+  <body>
+
+    <div class="container-fluid">
+      <!-- Example row of columns -->
+      <div class="row">
+        <div class="col-lg-4">
+          <h2>Nieuw Ingredi&euml;nt toevoegen</h2>
+          <p>Nieuw ingredi&euml;nt: <input type="text" id="ingredient" name="ingredient" /></p>
+          <p><button type="button" class="btn btn-info" id="addIngredient">Add extra ingredi&euml;nt</button></p>
+        </div>
+        <div class="col-lg-4">
+          <h2>Nieuwe Pizza toevoegen</h2>
+          <p>Naam pizza: <input type="text" id="pizzaName" name="pizzaName" /></p>
+          <p>Prijs: <input type="text" id="pizzaPrijs" name="pizzaPrijs" /></p>
+          <p>Ingredi&euml;nten: <select id="ingredientenLijst" multiple></select>
+          <p><button type="button" class="btn btn-info" id="addPizza">Add extra pizza</button></p>
+        </div>
+        <div class="col-lg-4">
+          <h2>Pizza's bestellen</h2>
+          <p>Aantal: <input type="text" id="aantal" name="aantal" /></p>
+          <div class="row">
+			<div class="col-lg-6"><p>Pizza: <select id="pizzaLijst" multiple></select></p></div>
+			<div class="col-lg-6">
+				<h5 id="showPizzaName"></h5>
+				<p id="showPizzaDetails"></p>
+			</div>
+		  </div>
+		  <p><button type="button" class="btn btn-info" id="orderPizza">Add pizza</button></p>
+        
+          <h3>Winkelmandje</h3>
+          <table>
+            <tbody id="winkelmandje">
+          	<tr><th>Aantal</th><th>Pizza</th><th>Prijs</th></tr>
+            <tr id="totaalrij"><th></th><th></th><th id="totaal">0</th></tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+
+    </div> <!-- /container -->
+
+
+    <script src="pizza.js"></script>
+  </body>
+</html>
