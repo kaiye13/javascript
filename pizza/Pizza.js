@@ -17,7 +17,7 @@ var winkelmandje = [];
 
 
 addList();
-
+//toevoegen van de pizaa's in de lijst
 function addPizzaToSelect(name){
 	var pizzalijst = document.getElementById("pizzaLijst");
 	var option = document.createElement("option");
@@ -25,14 +25,14 @@ function addPizzaToSelect(name){
 	pizzalijst.add(option); 
 }
 
-
+//toevoegen van ingredienten aan de ingredienten lijst
 function addIngredientToSelect(name){
 	var pizzalijst = document.getElementById("ingredientenLijst");
 	var option = document.createElement("option");
 	option.text = name; 
 	pizzalijst.add(option);  
 }
-
+//toevoegen aan de lijst
 function addList(){
 	for (var i in pizzas){
 	
@@ -46,7 +46,7 @@ function addList(){
 	}
 }
 
-
+//tonen van het winkelmandje
 function toonWinkelmandje(){
 	var tabel = document.getElementById("winkelmandje");
 	var totaalrij = document.getElementById("totaalrij");
@@ -100,7 +100,7 @@ document.getElementById("pizzaLijst").onchange = function() {
 	  alert("No pizzas available");
 	}
 }
-
+//oerder pizza button
 document.getElementById("orderPizza").onclick = function() {
 
 	var aantal = +document.getElementById("aantal").value;
@@ -135,7 +135,7 @@ document.getElementById("orderPizza").onclick = function() {
 	}
 }
 
-
+//add pizza button
 document.getElementById("addPizza").onclick = function() {
 	var pizzaNaam = document.getElementById("pizzaName").value;
 	var pizzaPrijs = +document.getElementById("pizzaPrijs").value;
@@ -161,7 +161,7 @@ document.getElementById("addPizza").onclick = function() {
 	}
 	
 }
-
+//add ingredient button
 document.getElementById("addIngredient").onclick = function() {
 	var nieuwIngredient = document.getElementById("ingredient").value;
 	
