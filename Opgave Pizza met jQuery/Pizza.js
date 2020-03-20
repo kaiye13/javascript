@@ -28,7 +28,8 @@ addList();
 //De functie voegt een optie toe aan de pizza selectielijst
 //en plaatst hier de tekst in die meegegeven wordt met name  
 function addPizzaToSelect(name){
-
+	$("#pizzaLijst").append("<option>"+name+"</option>");
+	$("#pizzaLijst").attr("size", Object.keys(pizzas).length);
 }
 
 //De functie voegt een optie toe aan de ingrediënten selectielijst
