@@ -63,11 +63,17 @@
         var markerPosities = [
             { title: "UCLL - Campus Diepenbeek", position: { lat: 50.92906, lng: 5.39559 } },
             { title: "UCLL - Campus Proximus", position: { lat: 50.84625, lng: 4.72748 } }];
-        // add markers to the group
+
         var group = new H.map.Group();
+        // add markers to the group
+
         map.addObject(group);
+
+
         // Create the default UI:
         var ui = H.ui.UI.createDefault(map, defaultLayers);
+
+
         for (let i = 0; i < markerPosities.length; i++) {
 
             // Create a marker using the previously instantiated icon:     
@@ -80,7 +86,7 @@
 
 
                 // Create an info bubble object at a specific geographic location:
-                var bubble = new H.ui.InfoBubble(markerPosities[i].position, {content: markerPosities[i].title});
+                var bubble = new H.ui.InfoBubble(markerPosities[i].position, { content: markerPosities[i].title });
 
                 // Add info bubble to the UI:
                 ui.addBubble(bubble);
@@ -90,17 +96,10 @@
 
         }
 
-
-
         //   get geo bounding box for the group and set it to the map
         map.getViewModel().setLookAtData({
             bounds: group.getBoundingBox()
         });
-
-
-
-
-
 
     </script>
 </body>
