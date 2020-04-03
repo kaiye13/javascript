@@ -85,8 +85,10 @@
             marker.addEventListener('tap', function (evt) {
 
 
+                var position=evt.target.getGeometry(); //marker zelf op deze plaats
                 // Create an info bubble object at a specific geographic location:
-                var bubble = new H.ui.InfoBubble(markerPosities[i].position, { content: markerPosities[i].title });
+                //var bubble = new H.ui.InfoBubble(markerPosities[i].position, { content: markerPosities[i].title });
+                var bubble = new H.ui.InfoBubble(position, { content: markerPosities[i].title });
 
                 // Add info bubble to the UI:
                 ui.addBubble(bubble);
