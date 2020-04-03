@@ -51,6 +51,16 @@
 
         // Instantiate the default behavior, providing the mapEvents object:
         var behavior = new H.mapevents.Behavior(mapEvents);
+
+        // Create a marker icon from an image URL:
+        //werkt niet op chrome en firefox, dit gaat wel bij chrome in de developper mode, dit is een beveiliging
+        var icon = new H.map.Icon('Logo_klein.png');
+
+        // Create a marker using the previously instantiated icon:
+        var marker = new H.map.Marker({ lng: 5.39559, lat: 50.92906 }, { icon: icon });
+
+        // Add the marker to the map:
+        map.addObject(marker);
     </script>
 </body>
 
