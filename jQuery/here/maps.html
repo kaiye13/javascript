@@ -4,6 +4,8 @@
     <meta name="viewport" content="initial-scale=1.0, width=device-width" />
     <script src="https://js.api.here.com/v3/3.1/mapsjs-core.js" type="text/javascript" charset="utf-8"></script>
     <script src="https://js.api.here.com/v3/3.1/mapsjs-service.js" type="text/javascript" charset="utf-8"></script>
+    <script src="https://js.api.here.com/v3/3.1/mapsjs-mapevents.js" type="text/javascript" charset="utf-8"></script>
+
     <style>
         #mapContainer {
             height: 100%;
@@ -37,8 +39,10 @@
                 zoom: 14,
                 center: { lng: 5.39559, lat: 50.92906 }
             });
-            //traffic toevoegen
-            map.addLayer(defaultLayers.vector.normal.traffic);
+        //traffic toevoegen
+        map.addLayer(defaultLayers.vector.normal.traffic);
+        // Enable the event system on the map instance:
+        var mapEvents = new H.mapevents.MapEvents(map);
     </script>
 </body>
 
