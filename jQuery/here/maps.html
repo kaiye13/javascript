@@ -63,47 +63,45 @@
         var markerPosities = [
             { title: "UCLL - Campus Diepenbeek", position: { lat: 50.92906, lng: 5.39559 } },
             { title: "UCLL - Campus Proximus", position: { lat: 50.84625, lng: 4.72748 } }];
-// add markers to the group
+        // add markers to the group
         var group = new H.map.Group();
         map.addObject(group);
+        // Create the default UI:
+        var ui = H.ui.UI.createDefault(map, defaultLayers);
+        for (let i = 0; i < markerPosities.length; i++) {
 
-        for(let i = 0 ; i<markerPosities.length; i++){
-
-        // Create a marker using the previously instantiated icon:     
-        var marker = new H.map.Marker( markerPosities[i].position , { icon: icon });
+            // Create a marker using the previously instantiated icon:     
+            var marker = new H.map.Marker(markerPosities[i].position, { icon: icon });
 
 
 
-                // // Add event listener:
-        // marker.addEventListener('tap', function (evt) {
-        //     // Log 'tap' and 'mouse' events:
-        //     console.log(evt.type, evt.currentPointer.type);
+            // Add event listener:
+            marker.addEventListener('tap', function (evt) {
 
-        //     // Create an info bubble object at a specific geographic location:
-        //     var bubble = new H.ui.InfoBubble({ lng: 5.39559, lat: 50.92906 }, {
-        //         content: '<b>Campus Diepenbeek</b>'
-        //     });
 
-        //     // Add info bubble to the UI:
-        //     ui.addBubble(bubble);
-        // });
+                // Create an info bubble object at a specific geographic location:
+                var bubble = new H.ui.InfoBubble(markerPosities[i].position, {content: markerPosities[i].title});
 
-        group.addObject(marker);
+                // Add info bubble to the UI:
+                ui.addBubble(bubble);
+            });
+
+            group.addObject(marker);
+
         }
 
 
 
-//   get geo bounding box for the group and set it to the map
-//   map.getViewModel().setLookAtData({
-//     bounds: group.getBoundingBox()
-//   });
+        //   get geo bounding box for the group and set it to the map
+        map.getViewModel().setLookAtData({
+            bounds: group.getBoundingBox()
+        });
 
 
 
 
 
-        // Create the default UI:
-        var ui = H.ui.UI.createDefault(map, defaultLayers);
+
     </script>
 </body>
 
