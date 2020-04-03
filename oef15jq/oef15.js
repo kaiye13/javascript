@@ -10,7 +10,7 @@ $(document).ready(function () {
         },
         mousedown: function () {
             $("#box").css("border", "solid purple 5px");
-        },
+        }, 
         mouseup: function () {
             $("#box").css("border", "solid purple 0px");
         }
