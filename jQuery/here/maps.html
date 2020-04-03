@@ -77,7 +77,7 @@
         for (let i = 0; i < markerPosities.length; i++) {
 
             // Create a marker using the previously instantiated icon:     
-            var marker = new H.map.Marker(markerPosities[i].position, { icon: icon });
+            var marker = new H.map.Marker(markerPosities[i].position, { icon: icon , data: markerPosities[i].title });
 
 
 
@@ -86,9 +86,11 @@
 
 
                 var position=evt.target.getGeometry(); //marker zelf op deze plaats
+
+                var data = evt.target.getData();
                 // Create an info bubble object at a specific geographic location:
                 //var bubble = new H.ui.InfoBubble(markerPosities[i].position, { content: markerPosities[i].title });
-                var bubble = new H.ui.InfoBubble(position, { content: markerPosities[i].title });
+                var bubble = new H.ui.InfoBubble(position, { content: data });
 
                 // Add info bubble to the UI:
                 ui.addBubble(bubble);
