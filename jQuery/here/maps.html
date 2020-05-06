@@ -38,7 +38,7 @@
             document.getElementById('mapContainer'),
             defaultLayers.vector.normal.map,
             {
-                zoom: 14,
+                zoom: 10,
                 center: { lng: 5.39559, lat: 50.92906 }
             });
         //traffic toevoegen
@@ -58,7 +58,7 @@
         //werkt niet op chrome en firefox, dit gaat wel bij chrome in de developper mode, dit is een beveiliging
         //dit doe je via een nieuwe snelkoppeling "C:\Program Files (x86)\Google\Chrome\Application\chrome.exe" --disable-web-security --user-data-dir="C:/ChromeDevSession"
         //anchor => middelpunt anker zetten
-        var icon = new H.map.Icon('Logo_klein.png', { anchor: { x: 20, y: 20 } });
+        var icon = new H.map.Icon('logo.png', { anchor: { x: 20, y: 20 } });
 
         var markerPosities = [
             { title: "UCLL - Campus Diepenbeek", position: { lat: 50.92906, lng: 5.39559 } },
