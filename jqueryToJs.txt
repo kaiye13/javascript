@@ -1,0 +1,76 @@
+https://github.com/jackocnr/intl-tel-input/wiki/Converting-jQuery-to-JavaScript?fbclid=IwAR3Wnofgw-M8DVvlOs2k9CbewfvHgARQ0D8wyLvFM2DudWlUXxOy_BP5EYc
+
+Converting jQuery to JavaScript
+Jack O'Connor edited this page on 23 Sep 2018 · 5 revisions
+Selectors
+$("body") => document.body
+$("html") => document.documentElement
+$(selector) => document.querySelector(selector)
+$elem.find(selector) => elem.querySelector(selector)
+$elem.parent() => elem.parentNode
+$elem.closest('.country') => elem.closest('.country')
+$input.closest('form') => input.form
+siblings: $el.prev() and $el.next() => el.previousElementSibling and el.nextElementSibling
+Input values: getting and setting
+$input.val() => input.value
+$input.val("hello") => input.value = "hello"
+Event Listeners
+$elem.on(eventName, handler) => elem.addEventListener(eventName, handler)
+Note: 3rd arg of false (for useCapture) not needed as not supporting IE8 - see addEventListener docs
+$elem.off(eventName) => elem.removeEventListener(eventName, handler) // note you must keep a ref to handler for this
+Key event listeners: use e.key === "+" instead of e.which === 43
+See key docs
+To defer event handling to some ancestor
+
+$ancestorElem.on(eventName, elemSelector, handler)
+=>
+
+var handler = function(e) {
+    var elem = e.target.closest(elemSelector);
+    if (elem) {
+      // do stuff
+    }
+}
+ancestorElem.addEventListener(eventName, handler, false)
+Event handlers
+key events: (e.which === 45) => (e.key === "Tab") - docs
+Class manipulation
+$elem.addClass(c) => elem.classList.add(c)
+$elem.removeClass(c) => elem.classList.remove(c)
+$elem.toggleClass(c) => elem.classList.toggle(c)
+$elem.hasClass(c) => elem.classList.contains(c)
+$elem.attr('class') = 'some classes' => elem.className = 'some classes'
+Styling
+$el.css({ top: "10px" }) => el.style.top = "10px"
+Scroll position
+$el.scrollTop() => el.scrollTop
+$el.scrollTop(10) => el.scrollTop = 10
+Utils
+$.inArray(item, arr) > -1 => arr.indexOf(item) > -1 // note: could use arr.includes(item) but would require polyfill for IE11
+$.extend({}, defaults, options) => Object.assign(defaults, options)
+$.trim(s) => s.trim()
+$input.val() => input.value
+Creating/appending elements
+$("<div>", {"class": c}).appendTo(parent);
+=>
+
+var elem = document.createElement("div");
+elem.className = c;
+container.appendChild(elem);
+To add copy:
+
+$elem.text(s)
+=>
+
+var elemText = document.createTextNode(text);
+elem.appendChild(elemText)
+To append a HTML string:
+
+$elem.append(htmlString) => elem.insertAdjacentHTML('beforeend', htmlString);
+Attributes
+$elem.attr("placeholder") => elem.getAttribute("placeholder")
+$elem.attr("placeholder", p) => elem.setAttribute("placeholder", p)
+Properties
+$el.props("disabled") => el.disabled
+$el.props("readonly") => el.readOnly
+

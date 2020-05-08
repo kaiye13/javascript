@@ -1,0 +1,454 @@
+<html>
+  <head>
+    <meta name="viewport" content="initial-scale=1.0, width=device-width" />
+
+    <script
+      src="https://js.api.here.com/v3/3.1/mapsjs-core.js"
+      type="text/javascript"
+      charset="utf-8"
+    ></script>
+    <script
+      src="https://js.api.here.com/v3/3.1/mapsjs-service.js"
+      type="text/javascript"
+      charset="utf-8"
+    ></script>
+    <script
+      src="https://js.api.here.com/v3/3.1/mapsjs-mapevents.js"
+      type="text/javascript"
+      charset="utf-8"
+    ></script>
+    <script
+      src="https://js.api.here.com/v3/3.1/mapsjs-ui.js"
+      type="text/javascript"
+      charset="utf-8"
+    ></script>
+    <link
+      rel="stylesheet"
+      type="text/css"
+      href="https://js.api.here.com/v3/3.1/mapsjs-ui.css"
+    />
+    <style>
+      #mapContainer {
+        height: 100%;
+      }
+
+      html,
+      body {
+        height: 100%;
+        margin: 0px;
+        padding: 0px;
+      }
+      #configParams {
+        position: fixed;
+        bottom: 25px;
+        right: 50px;
+      }
+      #configParams input,
+      #configParams button {
+        border: 2px solid #1f262a;
+        border-radius: 20px;
+        padding: 5px;
+      }
+      #configParams button {
+        color: white;
+        background-color: #1f262a;
+      }
+      #configParams input {
+        background-color: white;
+        color: #1f262a;
+      }
+    </style>
+  </head>
+  <body>
+    <div id="mapContainer"></div>
+    <div id="configParams">
+      <input id="startPoint" type="text" placeholder="Jouw adres" />
+      <button id="dichtstBij">Toon dichtste bij</button>
+      <button id="snelstBij">Toon snelst bereikbaar</button>
+      <button id="showMarkers">Toon alle Campussen</button>
+      <button id="hideMarkers">Verberg Campussen</button>
+    </div>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+    <script
+      src="campussenLijst.js"
+      type="text/javascript"
+      charset="utf-8"
+    ></script>
+    <script>
+      // Initialize the platform object:
+      var platform = new H.service.Platform({
+        apikey: "wIrLYhE1R2UaGWbY369VpRZHSKDrPLD_SXOsnOpK-1A",
+      });
+
+      // Obtain the default map types from the platform object
+      var defaultLayers = platform.createDefaultLayers();
+
+      // Instantiate (and display) a map object:
+      var map = new H.Map(
+        document.getElementById("mapContainer"),
+        defaultLayers.vector.normal.map,
+        {
+          zoom: 14,
+          center: { lat: 50.92906, lng: 5.39559 },
+        }
+      );
+      map.addLayer(defaultLayers.vector.normal.traffic);
+
+      // Enable the event system on the map instance:
+      var mapEvents = new H.mapevents.MapEvents(map);
+
+      // Instantiate the default behavior, providing the mapEvents object:
+      var behavior = new H.mapevents.Behavior(mapEvents);
+
+      // Create a marker icon from an image URL:
+      var icon = new H.map.Icon("Logo_klein.png", { anchor: { x: 20, y: 20 } });
+
+      // Create the default UI:
+      var ui = H.ui.UI.createDefault(map, defaultLayers);
+
+      // Get an instance of the geocoding service:
+      var service = platform.getSearchService();
+
+      /*var markerPosities = [	
+{title: "UCLL - Campus Diepenbeek" , 							 
+position: {lat: 50.92906, lng: 5.39559}},
+{title: "UCLL - Campus Proximus" , 							 
+position: {lat: 50.84625, lng: 4.72748}}];*/
+
+      var groupAll = new H.map.Group();
+      var groupOne = new H.map.Group();
+      // add markers to the group
+      //map.addObject(group);
+
+      for (var i = 0; i < ucllCampi.length; i++) {
+        var question = ucllCampi[i].adres;
+
+        $.when(getLocationData(question, i)).then(
+          function (position, index) {
+            var marker = new H.map.Marker(position, {
+              icon: icon,
+              data: ucllCampi[index].naam,
+            });
+
+            // Add event listener:
+            marker.addEventListener("tap", function (evt) {
+              var position = evt.target.getGeometry();
+              var data = evt.target.getData();
+
+              console.log(position, data);
+              // Log 'tap' and 'mouse' events:
+              // Create an info bubble object at a specific geographic location:
+              //var bubble = new H.ui.InfoBubble(markerPosities[i].position, {content: markerPosities[i].title});
+              var bubble = new H.ui.InfoBubble(position, { content: data });
+
+              // Add info bubble to the UI:
+              ui.addBubble(bubble);
+            });
+
+            groupAll.addObject(marker);
+            // get geo bounding box for the group and set it to the map
+            //map.getViewModel().setLookAtData({
+            //bounds: group.getBoundingBox()
+            //});
+          },
+          function (error) {
+            // error bericht tonen
+          }
+        );
+      }
+
+      $("#showMarkers").click(function () {
+        // Add the group to the map object (created earlier):
+        map.addObject(groupAll);
+
+        var bounds = groupAll.getBoundingBox();
+        console.log(bounds);
+        if (bounds) {
+          map.getViewModel().setLookAtData({
+            bounds: bounds,
+          });
+        } else {
+          map.getViewModel().setLookAtData({
+            position: { lng: 5.39559, lat: 50.92906 },
+            zoom: 14,
+          });
+        }
+      });
+
+      $("#hideMarkers").click(function () {
+        // Remove the group to the map object (created earlier):
+        map.removeObject(groupAll);
+        map.removeObject(groupOne);
+      });
+
+      $("#dichtstBij").click(function () {
+        getShortest(false);
+      });
+
+      $("#snelstBij").click(function () {
+        getShortest(true);
+      });
+
+      function getLocationData(geocodingParams, index) {
+        var defferObj = jQuery.Deferred();
+        var service = platform.getSearchService();
+        service.geocode(
+          { q: geocodingParams },
+          function (result) {
+            var position = result.items[0].position;
+            defferObj.resolve(position, index);
+          },
+          function (e) {
+            defferObj.reject("error");
+          }
+        );
+        return defferObj.promise();
+      }
+
+      function getDistance(startPosition, endPosition, index) {
+        var defferObj = jQuery.Deferred();
+
+        // Create the parameters for the routing request:
+        var routingParameters = {
+          // The routing mode:
+          mode: "fastest;car",
+          // The start point of the route:
+          waypoint0: "geo!" + startPosition.lat + "," + startPosition.lng,
+          // The end point of the route:
+          waypoint1: "geo!" + endPosition.lat + "," + endPosition.lng,
+        };
+
+        // Get an instance of the routing service:
+        var router = platform.getRoutingService();
+
+        // Call calculateRoute() with the routing parameters,
+        // the callback and an error callback function (called if a
+        // communication error occurs):
+        router.calculateRoute(
+          routingParameters,
+          function (result) {
+            console.log(index, result);
+            if (result.response != undefined) {
+              if (result.response.route.length > 0) {
+                console.log(
+                  index,
+                  result.response.route[0].summary.distance,
+                  result.response.route[0].summary.travelTime
+                );
+                defferObj.resolve(result.response.route[0].summary, index);
+              } else {
+                defferObj.resolve({ distance: -1, travelTime: -1 }, index);
+              }
+            } else {
+              defferObj.resolve({ distance: -1, travelTime: -1 }, index);
+            }
+          },
+          function (error) {
+            alert(error.message);
+            defferObj.reject("error");
+          }
+        );
+        return defferObj.promise();
+      }
+
+      function getDistances(startPosition) {
+        var defferObj = jQuery.Deferred();
+
+        var shortest = { index: -1, distance: -1, travelTime: -1 };
+        var fastest = { index: -1, distance: -1, travelTime: -1 };
+        var campiChecked = 0;
+
+        for (var i = 0; i < ucllCampi.length; i++) {
+          // convert campi to lat-lng coordinates
+          var geocodingParams = ucllCampi[i].adres;
+          console.log(geocodingParams);
+          $.when(getLocationData(geocodingParams, i)).then(
+            function (endPosition, index) {
+              ucllCampi[index].position = endPosition;
+              $.when(getDistance(startPosition, endPosition, index)).then(
+                function (summary, index) {
+                  ucllCampi[index].distance = summary.distance;
+                  ucllCampi[index].travelTime = summary.travelTime;
+
+                  if (
+                    (shortest.distance == -1 ||
+                      shortest.distance > summary.distance) &&
+                    summary.distance > -1
+                  ) {
+                    shortest = {
+                      index: index,
+                      distance: summary.distance,
+                      travelTime: summary.travelTime,
+                    };
+                  }
+
+                  if (
+                    (fastest.travelTime == -1 ||
+                      fastest.travelTime > summary.travelTime) &&
+                    summary.travelTime > -1
+                  ) {
+                    fastest = {
+                      index: index,
+                      distance: summary.distance,
+                      travelTime: summary.travelTime,
+                    };
+                  }
+
+                  campiChecked++;
+
+                  if (campiChecked >= ucllCampi.length) {
+                    defferObj.resolve(shortest, fastest);
+                  }
+                },
+                function (error) {
+                  // error bericht tonen
+                  console.log("getDistance error");
+                  defferObj.reject("error");
+                }
+              );
+            },
+            function (error) {
+              // error bericht tonen
+              console.log("getLocationData error");
+              defferObj.reject("error");
+            }
+          );
+        }
+
+        return defferObj.promise();
+      }
+
+      function getShortest(fast) {
+        searchLocation = $("#startPoint").val();
+        if (searchLocation.length > 0) {
+          // verwijder error messages
+          $("#configParams span").remove();
+
+          // convert searchLocation to lat-lng coordinates
+          console.log(searchLocation);
+          $.when(getLocationData(searchLocation, -1)).then(
+            function (startPosition, index) {
+              if (startPosition == -1) {
+                var errorMessage = $("<span></span>").text(
+                  "Adres niet gevonden."
+                );
+                $("#dichtstBij").before(errorMessage);
+                errorMessage.css({
+                  color: "red",
+                  "background-color": "white",
+                  position: "absolute",
+                  bottom: "30px",
+                  padding: "5px",
+                  "border-radius": "10px",
+                });
+              } else {
+                console.log("startPosition:", startPosition);
+                $.when(getDistances(startPosition)).then(
+                  function (shortest, fastest) {
+                    if (shortest.index > -1 && fastest.index > -1) {
+                      var home = new H.map.Marker(startPosition);
+
+                      if (fast) {
+                        var marker = new H.map.Marker(
+                          ucllCampi[fastest.index].position,
+                          { icon: icon, data: ucllCampi[fastest.index] }
+                        );
+                      } else {
+                        var marker = new H.map.Marker(
+                          ucllCampi[shortest.index].position,
+                          { icon: icon, data: ucllCampi[shortest.index] }
+                        );
+                      }
+
+                      marker.addEventListener("tap", function (evt) {
+                        // Add info bubble to the UI:
+                        console.log(evt.target.getData());
+                        var naam = evt.target.getData().naam;
+                        var adres = evt.target.getData().adres;
+                        var distance = evt.target.getData().distance;
+                        var travelTime = evt.target.getData().travelTime;
+                        var position = evt.target.getGeometry();
+
+                        // Create an info bubble object at a specific geographic location:
+                        var bubble = new H.ui.InfoBubble(position, {
+                          content:
+                            "<b>" +
+                            naam +
+                            "</b><br/>" +
+                            adres +
+                            "<br/>Afstand: " +
+                            distance / 1000 +
+                            "km<br/>Reistijd: " +
+                            travelTime / 60 +
+                            "min",
+                        });
+                        //bubble.addClass('infoWindow');
+
+                        ui.addBubble(bubble);
+                      });
+
+                      // Add the marker to the map:
+                      groupOne.removeAll();
+                      groupOne.addObject(home);
+                      groupOne.addObject(marker);
+
+                      map.addObject(groupOne);
+
+                      var bounds = groupOne.getBoundingBox();
+                      console.log(bounds);
+                      if (bounds) {
+                        map.getViewModel().setLookAtData({
+                          bounds: bounds,
+                        });
+                      } else {
+                        map.getViewModel().setLookAtData({
+                          position: { lng: 5.39559, lat: 50.92906 },
+                          zoom: 14,
+                        });
+                      }
+
+                      // get geo bounding box for the group and set it to the map
+                    } else {
+                      var errorMessage = $("<span></span>").text(
+                        "Kortst bij niet gevonden."
+                      );
+                      $("#dichtstBij").before(errorMessage);
+                      errorMessage.css({
+                        color: "red",
+                        "background-color": "white",
+                        position: "absolute",
+                        bottom: "30px",
+                        padding: "5px",
+                        "border-radius": "10px",
+                      });
+                    }
+                  },
+                  function (error) {
+                    // error bericht tonen
+                    console.log("getDistances error");
+                  }
+                );
+              }
+            },
+            function (error) {
+              // error bericht tonen
+              console.log("getLocationData error");
+            }
+          );
+        } else {
+          // Toon error message
+          var errorMessage = $("<span></span>").text("Vul adres in.");
+          $("#dichtstBij").before(errorMessage);
+          errorMessage.css({
+            color: "red",
+            "background-color": "white",
+            position: "absolute",
+            bottom: "30px",
+            padding: "5px",
+            "border-radius": "10px",
+          });
+        }
+      }
+    </script>
+  </body>
+</html>
