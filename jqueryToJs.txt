@@ -73,4 +73,3 @@ $elem.attr("placeholder", p) => elem.setAttribute("placeholder", p)
 Properties
 $el.props("disabled") => el.disabled
 $el.props("readonly") => el.readOnly
-
